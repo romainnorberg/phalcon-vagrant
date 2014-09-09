@@ -29,6 +29,15 @@ By default this setup uses 500MB RAM. You can change this in `Vagrantfile` and s
     v.customize ["modifyvm", :id, "--cpus", "2"]
     v.customize ["modifyvm", :id, "--ioapic", "on"]
 
+If there are packages you do not want installed, simply comment them out before provisioning, for example:
+
+    config.vm.provision "shell", path: "install/python.sh"
+
+Change to:
+
+    #config.vm.provision "shell", path: "install/python.sh"
+
+
 ## Packages Included
 
 - LAMP Stack
@@ -40,8 +49,8 @@ By default this setup uses 500MB RAM. You can change this in `Vagrantfile` and s
 - [Phalcon](http://phalconphp.com/en/)
 - [Phalcon Dev Tools](https://github.com/phalcon/phalcon-devtools)
 - [Redis 2.8](http://redis.io/)
-- [MongoDB 2.0.4](https://www.mongodb.org/)
 - [Composer (PHP)](https://getcomposer.org)
+- Python: Pip, Fabric, Virtualenv
 
 ## Requirements
 
@@ -159,7 +168,7 @@ You should be able to access the following URL's:
 
 ## Local Editing
 
-On your Host computer open any file explorer or IDE and navigate to `/www/`. 
+On your Host computer open any file explorer or IDE and navigate to `/www/`.
 This folder is mounted to the Virtual Machine. Any changes to files within here will reflect
 realtime changes in the Virtual Machine.
 

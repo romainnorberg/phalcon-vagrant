@@ -33,7 +33,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Provisioning Script
   # --------------------
-  config.vm.provision "shell", path: "init.sh"
+
+  # The Init Script
+  config.vm.provision "shell", path: "install/init.sh"
+
+  # Comment out anything you don't want, otherwise you can install them later
+  # with $ sudo basah file.sh
+  config.vm.provision "shell", path: "install/mysql.sh"
+  config.vm.provision "shell", path: "install/redis.sh"
+  config.vm.provision "shell", path: "install/devtools.sh"
+  config.vm.provision "shell", path: "install/python.sh"
+
+  # Output the completed details
+  config.vm.provision "shell", inline: <<SCRIPT
+echo -e "----------------------------------------\n\
+To create a Phalcon Project:\n\
+----------------------------------------\n\
+$ cd /vagrant/www\n\
+$ phalcon project projectname\n\n\
+
+Then follow the README.md to copy/paste the VirtualHost!\n\n\
+
+----------------------------------------\n\
+Default Site: http://192.168.50.4\n\
+----------------------------------------\n"
+SCRIPT
+
 
   # Synced Folder
   # --------------------
