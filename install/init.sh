@@ -15,6 +15,15 @@ sudo add-apt-repository ppa:phalcon/stable -y
 sudo apt-get update
 
 #
+# Utilities
+#
+sudo apt-get install -y make\
+    curl\
+    htop\
+    git-core\
+    vim
+
+#
 # PHP
 #
 sudo apt-get install -y\
@@ -36,15 +45,6 @@ sudo apt-get install -y\
         apache2\
         libapache2-mod-php5\
         libpcre3-dev
-
-#
-# Utilities
-#
-sudo apt-get install -y make\
-    curl\
-    htop\
-    git-core\
-    vim
 
 #
 # Enable Modules
@@ -69,17 +69,28 @@ sudo mv composer.phar /usr/local/bin/composer
 # Apache VHost
 #
 cd ~
-echo '<VirtualHost *:80>
-    DocumentRoot /vagrant/www
-</VirtualHost>
 
-<Directory "/vagrant/www">
-    Options Indexes Followsymlinks
-    AllowOverride All
-    Require all granted
-</Directory>' > vagrant.conf
+# Make sure to add Vagrant Here
 
-sudo mv vagrant.conf /etc/apache2/sites-available
+sites=('testing' 'vhost')
+for i in "${sites[@]}"
+do
+    echo "
+    <VirtualHost *:80>
+        DocumentRoot /vagrant/www/${i}
+    </VirtualHost>
+
+    <Directory '/vagrant/www/${i}'>
+        Options Indexes Followsymlinks
+        AllowOverride All
+        Require all granted
+    </Directory>" > $i.conf
+
+    sudo mkdir "/vagrant/www/${i}"
+
+    sudo mv "${i}.conf" /etc/apache2/sites-available
+    #sudo a2ensite $i
+done
 
 
 #
