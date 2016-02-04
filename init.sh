@@ -112,19 +112,18 @@ echo 'extension=libsodium.so' | tee /etc/php5/mods-available/libsodium.ini > /de
 php5enmod libsodium
 
 #
-# Zephir
-#
-git clone --depth=1 git://github.com/phalcon/zephir.git
-cd zephir
-./install -c
-
-#
 # Install Phalcon Framework
 #
+sudo apt-add-repository ppa:phalcon/stable
+sudo apt-get update
+sudo apt-get install php5-phalcon
+
 git clone --depth=1 git://github.com/phalcon/cphalcon.git
-zephir build
-echo -e "extension=phalcon.so" | tee /etc/php5/mods-available/phalcon.ini > /dev/null
-php5enmod phalcon
+cd cphalcon/build
+sudo ./install
+
+echo -e "extension=phalcon.so" | sudo tee /etc/php5/mods-available/phalcon.ini > /dev/null
+sudo php5enmod phalcon
 
 #
 # Redis
@@ -205,6 +204,11 @@ sudo sed -i '/\[Session\]/a session.save_path = "/tmp"' /etc/php5/apache2/php.in
 # Reload apache
 #
 sudo a2ensite vagrant
+
+# 1) uuid app
+sudo cp /vagrant/files/uuid.conf /etc/apache2/sites-available/uuid.conf
+sudo a2ensite uuid
+
 sudo a2dissite 000-default
 sudo service apache2 restart
 sudo service mongodb restart
@@ -213,17 +217,42 @@ sudo service mongodb restart
 #  Cleanup
 #
 sudo apt-get autoremove -y
-
 sudo usermod -a -G www-data vagrant
 
+#
+#  Mysql database
+#
+sudo mysqladmin create uuid_app
+
+#
+#  Phalcon Developer Tools on Linux
+#
+cd /vagrant/temp/
+git clone https://github.com/phalcon/phalcon-devtools
+cd phalcon-devtools
+. ./phalcon.sh
+chmod ugo+x /usr/bin/phalcon
+
+#
+#  uuid project database migration
+#
+cd /vagrant/www/uuid/
+mkdir .phalcon
+phalcon migration run --config=app/config/config.php --migrations=app/migrations --version=1.0.0
+
+sudo mysql uuid_app < /vagrant/files/uuid/uuid-data.sql
+
 echo -e "----------------------------------------"
-echo -e "To create a Phalcon Project:\n"
+echo -e "Don't forget to add \n"
+echo -e " $ 192.168.50.9    uuid.dev"
+echo -e " $ 192.168.50.9    xxxxxxxx"
+echo -e "to your hosts file\n"
+echo -e "----------------------------------------"
+
+echo -e "----------------------------------------"
+echo -e "To create a new Phalcon Project:\n"
 echo -e "----------------------------------------"
 echo -e "$ cd /vagrant/www"
 echo -e "$ phalcon project <projectname>\n"
 echo -e
 echo -e "Then follow the README.md to copy/paste the VirtualHost!\n"
-
-echo -e "----------------------------------------"
-echo -e "Default Site: http://192.168.50.4"
-echo -e "----------------------------------------"

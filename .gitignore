@@ -5,4 +5,5 @@
 .settings
 .vagrant*
 www/*
+!www/uuid
 !www/index.php
