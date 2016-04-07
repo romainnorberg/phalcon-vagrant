@@ -36,6 +36,7 @@ Inspiration:
 - https://docs.phalconphp.com/en/latest/api/Phalcon_Security_Random.html
 - https://forum.phalconphp.com/discussion/1603/get-id-uuid-short-after-create-model
 - https://www.youtube.com/watch?v=8O-IeLRgsCI #Bonnes pratiques de déploiement PHP en 2015 - Quentin Adam #phptour 34:58 | 41:18
+- https://www.clever-cloud.com/blog/engineering/2015/05/20/why-auto-increment-is-a-terrible-idea/
 ```
 #### 2) app test with profiler
 

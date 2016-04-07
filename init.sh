@@ -209,6 +209,10 @@ sudo a2ensite vagrant
 sudo cp /vagrant/files/uuid.conf /etc/apache2/sites-available/uuid.conf
 sudo a2ensite uuid
 
+# 2) api app
+sudo cp /vagrant/files/api.conf /etc/apache2/sites-available/api.conf
+sudo a2ensite api
+
 sudo a2dissite 000-default
 sudo service apache2 restart
 sudo service mongodb restart
